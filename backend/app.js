@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const cors = require("cors")
+const cors = require("cors");
 const session = require("express-session");
 const userRoute = require("./routes/userRoute");
 const studentRoute = require("./routes/studentRoute");
@@ -10,7 +10,7 @@ const db = require("./db");
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors)
+app.use(cors());
 app.use(morgan("dev"));
 app.use(
   session({

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -21,10 +22,22 @@ const SignUp = () => {
     console.log("Gender => ", formData.gender);
   };
 
+  const SignUp = (e) => {
+    e.preventDefault();
+    axios
+      .post("http://localhost:3000/user/signUp", formData)
+      .then((response) => {
+        console.log("response => ", response.data);
+      })
+      .catch((error) => {
+        console.log("error: ", error.message);
+      });
+  };
+
   return (
     <div>
       <h1 align="center">User Registration</h1>
-      <form>
+      <form onSubmit={SignUp}>
         <table align="center">
           <tr>
             <th>FirstName:</th>
@@ -97,7 +110,9 @@ const SignUp = () => {
           </tr>
           <tr>
             <th></th>
-            <td><input type="submit" value="SingUp" /></td>
+            <td>
+              <input type="submit" value="SingUp" />
+            </td>
           </tr>
         </table>
       </form>
