@@ -100,7 +100,9 @@ const SignUp = () => {
                   placeholder="Enter First Name"
                   onChange={handleChange}
                 />
-                {errors.firstName && <div style={{color: "red"}}>{errors.firstName}</div>}
+                {errors.firstName && (
+                  <div style={{ color: "red" }}>{errors.firstName}</div>
+                )}
               </td>
             </tr>
             <tr>
@@ -113,7 +115,9 @@ const SignUp = () => {
                   placeholder="Enter Last Name"
                   onChange={handleChange}
                 />
-                {errors.lastName && <div style={{color: "red"}}>{errors.lastName}</div>}
+                {errors.lastName && (
+                  <div style={{ color: "red" }}>{errors.lastName}</div>
+                )}
               </td>
             </tr>
             <tr>
@@ -126,7 +130,9 @@ const SignUp = () => {
                   placeholder="Enter Email Id"
                   onChange={handleChange}
                 />
-                {errors.loginId && <div style={{color: "red"}}>{errors.loginId}</div>}
+                {errors.loginId && (
+                  <div style={{ color: "red" }}>{errors.loginId}</div>
+                )}
               </td>
             </tr>
             <tr>
@@ -138,7 +144,9 @@ const SignUp = () => {
                   value={formData.password}
                   onChange={handleChange}
                 />
-                {errors.password && <div style={{color: "red"}}>{errors.password}</div>}
+                {errors.password && (
+                  <div style={{ color: "red" }}>{errors.password}</div>
+                )}
               </td>
             </tr>
             <tr>
@@ -150,7 +158,7 @@ const SignUp = () => {
                   value={formData.dob}
                   onChange={handleChange}
                 />
-                {errors.dob && <div style={{color: "red"}}>{errors.dob}</div>}
+                {errors.dob && <div style={{ color: "red" }}>{errors.dob}</div>}
               </td>
             </tr>
             <tr>
@@ -162,7 +170,9 @@ const SignUp = () => {
                   value={formData.gender}
                   onChange={handleChange}
                 />
-                {errors.gender && <div style={{color: "red"}}>{errors.gender}</div>}
+                {errors.gender && (
+                  <div style={{ color: "red" }}>{errors.gender}</div>
+                )}
               </td>
             </tr>
             <tr>
