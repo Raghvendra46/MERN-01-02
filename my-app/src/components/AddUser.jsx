@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const SignUp = () => {
+const AddUser = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -9,7 +9,7 @@ const SignUp = () => {
     password: "",
     dob: "",
     gender: "",
-    role: "User",
+    role: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -38,7 +38,7 @@ const SignUp = () => {
 
     if (!formData.loginId.trim()) {
       newErrors.loginId = "Login ID is required";
-    } else if (!formData.loginId.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+    } else if (!formData.loginId.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
       newErrors.loginId = "Login ID format is invalid";
     }
 
@@ -59,11 +59,15 @@ const SignUp = () => {
       newErrors.gender = "Gender is required";
     }
 
+    if (!formData.role) {
+      newErrors.role = "Role is required";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSignUp = (e) => {
+  const handleAddUser = (e) => {
     e.preventDefault();
 
     if (!validate()) {
@@ -71,7 +75,7 @@ const SignUp = () => {
     }
 
     axios
-      .post("http://localhost:3000/user/signUp", formData)
+      .post("http://localhost:3000/user/save", formData)
       .then((response) => {
         setMessage("User registered successfully!");
         console.log("response => ", response.data);
@@ -85,7 +89,7 @@ const SignUp = () => {
   return (
     <div>
       <h1 align="center">User Registration</h1>
-      <form onSubmit={handleSignUp}>
+      <form onSubmit={handleAddUser}>
         {message && (
           <div
             align="center"
@@ -186,9 +190,24 @@ const SignUp = () => {
               </td>
             </tr>
             <tr>
+              <th>Role:</th>
+              <td>
+                <input
+                  type="text"
+                  name="role"
+                  value={formData.role}
+                  onChange={handleChange}
+                  placeholder="Enter Role"
+                />
+                {errors.role && (
+                  <div style={{ color: "red" }}>{errors.role}</div>
+                )}
+              </td>
+            </tr>
+            <tr>
               <th></th>
               <td>
-                <input type="submit" value="SignUp" />
+                <input type="submit" value="Save" />
               </td>
             </tr>
           </tbody>
@@ -198,4 +217,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default AddUser;

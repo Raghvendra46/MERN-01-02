@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const userService = require("../service/userService");
-const { isLoggedInUser } = require("../middleware/authMiddleware");
+// const { isLoggedInUser } = require("../middleware/authMiddleware");
 
 router.post("/signUp", (req, res) => {
   userService
@@ -35,7 +35,7 @@ router.post("/login", (req, res) => {
     });
 });
 
-router.use(isLoggedInUser);
+// router.use(isLoggedInUser);
 
 router.post("/save", (req, res) => {
   userService

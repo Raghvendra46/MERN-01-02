@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const marksheetService = require("../service/marksheetService");
-const { isLoggedInUser } = require("../middleware/authMiddleware");
+// const { isLoggedInUser } = require("../middleware/authMiddleware");
 
-router.use(isLoggedInUser);
+// router.use(isLoggedInUser);
 
 router.post("/save", (req, res) => {
   marksheetService

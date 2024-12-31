@@ -1,39 +1,33 @@
 import "./App.css";
-import Greeting from "./components/Greeting";
-import AboutUs from "./components/AboutUs";
-import ContactUs from "./components/ContactUs";
 import Welcome from "./components/Welcome";
 import SignUp from "./components/SignUp";
 import Login from "./components/Login";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Header from "./components/Header";
+import UserList from "./components/UserList";
+import AddUser from "./components/AddUser";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
 
-const App = () =>  {
+const App = () => {
   return (
     <>
       <Router>
         <div>
-          <Greeting name="User" />
+          <Header />
+          <Routes>
+            <Route path="/" element={<Welcome />}></Route>
+            <Route path="/signup" element={<SignUp />}></Route>
+            <Route path="/login" element={<Login />}></Route>
+            <Route path="userlist" element={<UserList />}></Route>
+            <Route path="addUser" element={<AddUser />}></Route>
+          </Routes>
         </div>
-
-        <nav>
-          &nbsp;&nbsp;
-          <Link to={"/"}>Home</Link> |&nbsp;&nbsp;
-          <Link to={"/about-us"}>About-us</Link> |&nbsp;&nbsp;
-          <Link to={"/contact-us"}>Contact-us</Link> |&nbsp;&nbsp;
-          <Link to={"/signup"}>Signup</Link> |&nbsp;&nbsp;
-          <Link to={"/login"}>Login</Link>
-        </nav>
-
-        <Routes>
-          <Route path="/" element={<Welcome />}></Route>
-          <Route path="/about-us" element={<AboutUs />}></Route>
-          <Route path="/contact-us" element={<ContactUs />}></Route>
-          <Route path="/signup" element={<SignUp />}></Route>
-          <Route path="/login" element={<Login />}></Route>
-        </Routes>
       </Router>
     </>
   );
-}
+};
 
 export default App;
