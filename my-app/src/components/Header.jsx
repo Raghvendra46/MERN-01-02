@@ -19,6 +19,10 @@ const Header = () => {
           <Link to="/">Welcome</Link> |&nbsp;
           <Link to="/userList">User List</Link> |&nbsp;
           <Link to="/addUser">Add User</Link> |&nbsp;
+          <Link to="/studentList">Student List</Link> |&nbsp;
+          <Link to="/addStudent">Add Student</Link> |&nbsp;
+          <Link to="/marksheetList">Marksheet List</Link> |&nbsp;
+          <Link to="/addMarksheet">Add Marksheet</Link> |&nbsp;
           <Link to="#" onClick={logout}>
             Logout
           </Link>

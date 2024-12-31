@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const AddUser = () => {
+const AddMarksheet = () => {
   const [formData, setFormData] = useState({
+    rollNo: "",
     firstName: "",
     lastName: "",
-    loginId: "",
-    password: "",
-    dob: "",
-    gender: "",
-    role: "",
+    physics: "",
+    chemistry: "",
+    maths: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -24,6 +23,10 @@ const AddUser = () => {
   const validate = () => {
     const newErrors = {};
 
+    if (!formData.rollNo) {
+      newErrors.rollNo = "Roll No. is required";
+    }
+
     if (!formData.firstName.trim()) {
       newErrors.firstName = "First Name is required";
     } else if (!isNaN(formData.firstName)) {
@@ -36,38 +39,23 @@ const AddUser = () => {
       newErrors.lastName = "Last Name should only include letters";
     }
 
-    if (!formData.loginId.trim()) {
-      newErrors.loginId = "Login ID is required";
-    } else if (!formData.loginId.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
-      newErrors.loginId = "Login ID format is invalid";
+    if (!formData.physics) {
+      newErrors.physics = "Physics marks are required";
     }
 
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-    } else if (!formData.password.match(/^(?=.*\d)(?=.*[^\w\d\s]).*$/i)) {
-      newErrors.password =
-        "Password must contain a number and a special character";
-    } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters long";
+    if (!formData.chemistry) {
+      newErrors.chemistry = "Chemistry marks are required";
     }
 
-    if (!formData.dob) {
-      newErrors.dob = "Date of Birth is required";
-    }
-
-    if (!formData.gender) {
-      newErrors.gender = "Gender is required";
-    }
-
-    if (!formData.role) {
-      newErrors.role = "Role is required";
+    if (!formData.maths) {
+      newErrors.maths = "Maths marks are required";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleAddUser = (e) => {
+  const handleAddMarksheet = (e) => {
     e.preventDefault();
 
     if (!validate()) {
@@ -75,9 +63,9 @@ const AddUser = () => {
     }
 
     axios
-      .post("http://localhost:3000/user/save", formData)
+      .post("http://localhost:3000/marksheet/save", formData)
       .then((response) => {
-        setMessage("User added successfully!");
+        setMessage("Marksheet Added successfully");
         console.log("response => ", response.data);
       })
       .catch((error) => {
@@ -88,8 +76,8 @@ const AddUser = () => {
 
   return (
     <div>
-      <h1 align="center">Add User</h1>
-      <form onSubmit={handleAddUser}>
+      <h1 align="center">Add Marksheet</h1>
+      <form onSubmit={handleAddMarksheet}>
         {message && (
           <div
             align="center"
@@ -103,6 +91,21 @@ const AddUser = () => {
         )}
         <table align="center">
           <tbody>
+            <tr>
+              <th>RollNo:</th>
+              <td>
+                <input
+                  type="text"
+                  name="rollNo"
+                  value={formData.rollNo}
+                  placeholder="Enter Roll No."
+                  onChange={handleChange}
+                />
+                {errors.rollNo && (
+                  <div style={{ color: "red" }}>{errors.rollNo}</div>
+                )}
+              </td>
+            </tr>
             <tr>
               <th>FirstName:</th>
               <td>
@@ -134,73 +137,44 @@ const AddUser = () => {
               </td>
             </tr>
             <tr>
-              <th>LoginId:</th>
-              <td>
-                <input
-                  type="email"
-                  name="loginId"
-                  value={formData.loginId}
-                  placeholder="Enter Email Id"
-                  onChange={handleChange}
-                />
-                {errors.loginId && (
-                  <div style={{ color: "red" }}>{errors.loginId}</div>
-                )}
-              </td>
-            </tr>
-            <tr>
-              <th>Password:</th>
-              <td>
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  placeholder="Enter Password"
-                  onChange={handleChange}
-                />
-                {errors.password && (
-                  <div style={{ color: "red" }}>{errors.password}</div>
-                )}
-              </td>
-            </tr>
-            <tr>
-              <th>DOB:</th>
-              <td>
-                <input
-                  type="date"
-                  name="dob"
-                  value={formData.dob}
-                  onChange={handleChange}
-                />
-                {errors.dob && <div style={{ color: "red" }}>{errors.dob}</div>}
-              </td>
-            </tr>
-            <tr>
-              <th>Gender:</th>
+              <th>Physics:</th>
               <td>
                 <input
                   type="text"
-                  name="gender"
-                  value={formData.gender}
+                  name="physics"
+                  value={formData.physics}
                   onChange={handleChange}
                 />
-                {errors.gender && (
-                  <div style={{ color: "red" }}>{errors.gender}</div>
+                {errors.physics && (
+                  <div style={{ color: "red" }}>{errors.physics}</div>
                 )}
               </td>
             </tr>
             <tr>
-              <th>Role:</th>
+              <th>Chemistry:</th>
               <td>
                 <input
                   type="text"
-                  name="role"
-                  value={formData.role}
+                  name="chemistry"
+                  value={formData.chemistry}
                   onChange={handleChange}
-                  placeholder="Enter Role"
                 />
-                {errors.role && (
-                  <div style={{ color: "red" }}>{errors.role}</div>
+                {errors.chemistry && (
+                  <div style={{ color: "red" }}>{errors.chemistry}</div>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <th>Maths:</th>
+              <td>
+                <input
+                  type="text"
+                  name="maths"
+                  value={formData.maths}
+                  onChange={handleChange}
+                />
+                {errors.maths && (
+                  <div style={{ color: "red" }}>{errors.maths}</div>
                 )}
               </td>
             </tr>
@@ -217,4 +191,4 @@ const AddUser = () => {
   );
 };
 
-export default AddUser;
+export default AddMarksheet;

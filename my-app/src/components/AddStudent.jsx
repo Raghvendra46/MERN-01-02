@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const AddUser = () => {
+const AddStudent = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -9,7 +9,6 @@ const AddUser = () => {
     password: "",
     dob: "",
     gender: "",
-    role: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -38,7 +37,11 @@ const AddUser = () => {
 
     if (!formData.loginId.trim()) {
       newErrors.loginId = "Login ID is required";
-    } else if (!formData.loginId.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
+    } else if (
+      !formData.loginId.match(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+      )
+    ) {
       newErrors.loginId = "Login ID format is invalid";
     }
 
@@ -59,15 +62,11 @@ const AddUser = () => {
       newErrors.gender = "Gender is required";
     }
 
-    if (!formData.role) {
-      newErrors.role = "Role is required";
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleAddUser = (e) => {
+  const handleAddStudent = (e) => {
     e.preventDefault();
 
     if (!validate()) {
@@ -75,9 +74,9 @@ const AddUser = () => {
     }
 
     axios
-      .post("http://localhost:3000/user/save", formData)
+      .post("http://localhost:3000/student/save", formData)
       .then((response) => {
-        setMessage("User added successfully!");
+        setMessage("Student added successfully!");
         console.log("response => ", response.data);
       })
       .catch((error) => {
@@ -88,8 +87,8 @@ const AddUser = () => {
 
   return (
     <div>
-      <h1 align="center">Add User</h1>
-      <form onSubmit={handleAddUser}>
+      <h1 align="center">Add Student</h1>
+      <form onSubmit={handleAddStudent}>
         {message && (
           <div
             align="center"
@@ -190,21 +189,6 @@ const AddUser = () => {
               </td>
             </tr>
             <tr>
-              <th>Role:</th>
-              <td>
-                <input
-                  type="text"
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-                  placeholder="Enter Role"
-                />
-                {errors.role && (
-                  <div style={{ color: "red" }}>{errors.role}</div>
-                )}
-              </td>
-            </tr>
-            <tr>
               <th></th>
               <td>
                 <input type="submit" value="save" />
@@ -217,4 +201,4 @@ const AddUser = () => {
   );
 };
 
-export default AddUser;
+export default AddStudent;
