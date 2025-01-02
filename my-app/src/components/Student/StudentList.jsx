@@ -1,20 +1,36 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+axios.defaults.withCredentials = true;
+
 const StudentList = () => {
   const [studentList, setStudentList] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   useEffect(() => {
     axios
       .get("http://localhost:3000/student/searchStudent")
       .then((response) => {
-        console.log("Data => ", response.data);
-        setStudentList(response.data);
+        if (response.status === 401) {
+          setIsAuthenticated(false);
+        } else {
+          setStudentList(response.data);
+        }
       })
       .catch((error) => {
         console.log("Error fetching students: ", error.message);
+        setIsAuthenticated(false);
       });
   }, []);
+
+  if (!isAuthenticated) {
+    return (
+      <div align="center">
+        <br />
+        <h3 color="red">You are not authorized to access this page.</h3>
+      </div>
+    );
+  }
 
   return (
     <form>

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const userService = require("../service/userService");
-// const { isLoggedInUser } = require("../middleware/authMiddleware");
+const { isLoggedInUser } = require("../middleware/authMiddleware");
 
 router.post("/signUp", (req, res) => {
   userService
@@ -12,6 +12,17 @@ router.post("/signUp", (req, res) => {
     .catch((error) => {
       console.log("Error: ", error.message);
     });
+});
+
+router.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: "Logout failed" });
+    } else {
+      res.json({ message: "Logout successful" });
+    }
+  });
 });
 
 router.post("/login", (req, res) => {
@@ -35,7 +46,7 @@ router.post("/login", (req, res) => {
     });
 });
 
-// router.use(isLoggedInUser);
+router.use(isLoggedInUser);
 
 router.post("/save", (req, res) => {
   userService

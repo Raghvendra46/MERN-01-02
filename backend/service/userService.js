@@ -5,7 +5,7 @@ const addUser = (userData) => {
     .then((existingUser) => {
       if (existingUser) {
         return {
-          message: "Login ID already exists, please enter a different Login ID",
+          error: "Login ID already exists, please enter a different Login ID",
         };
       } else {
         const newUser = new user(userData);

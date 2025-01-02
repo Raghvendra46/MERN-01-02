@@ -46,6 +46,8 @@ const MarksheetList = () => {
           <th>Maths</th>
           <th>Percentage</th>
           <th>Status</th>
+          <th>Edit</th>
+          <th>Remove</th>
         </thead>
         <tbody>
           {marksheetList.map((marksheet) => (
@@ -56,8 +58,14 @@ const MarksheetList = () => {
               <td>{marksheet.physics}</td>
               <td>{marksheet.chemistry}</td>
               <td>{marksheet.maths}</td>
-              <td>{percent(marksheet.totalMarks)}</td>
+              <td>{percent(marksheet.totalMarks)+'%'}</td>
               <td>{checkStatus(marksheet)}</td>
+              <td>
+                <a href="#">edit</a>
+              </td>
+              <td>
+                <button>delete</button>
+              </td>
             </tr>
           ))}
         </tbody>

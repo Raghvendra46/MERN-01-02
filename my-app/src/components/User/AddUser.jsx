@@ -77,7 +77,7 @@ const AddUser = () => {
     axios
       .post("http://localhost:3000/user/save", formData)
       .then((response) => {
-        setMessage("User added successfully!");
+        setMessage(response.data.error ? response.data.error : 'User Added successfully');
         console.log("response => ", response.data);
       })
       .catch((error) => {

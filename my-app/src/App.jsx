@@ -1,14 +1,14 @@
 import "./App.css";
 import Welcome from "./components/Welcome";
-import SignUp from "./components/SignUp";
-import Login from "./components/Login";
+import SignUp from "./components/Auth/SignUp";
+import Login from "./components/Auth/Login";
 import Header from "./components/Header";
-import UserList from "./components/UserList";
-import AddUser from "./components/AddUser";
-import StudentList from "./components/StudentList";
-import AddStudent from "./components/AddStudent";
-import MarksheetList from "./components/MarksheetList";
-import AddMarksheet from "./components/AddMarksheet";
+import UserList from "./components/User/UserList";
+import AddUser from "./components/User/AddUser";
+import StudentList from "./components/Student/StudentList";
+import AddStudent from "./components/Student/AddStudent";
+import MarksheetList from "./components/Marksheet/MarksheetList";
+import AddMarksheet from "./components/Marksheet/AddMarksheet";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const App = () => {

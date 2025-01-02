@@ -1,20 +1,36 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+axios.defaults.withCredentials = true; // Accept session and cookies provide by backend server
+
 const UserList = () => {
   const [userList, setUserList] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   useEffect(() => {
     axios
       .get("http://localhost:3000/user/search")
       .then((response) => {
-        console.log("data => ", response.data);
-        setUserList(response.data);
+        if (response.status === 401) {
+          setIsAuthenticated(false);
+        } else {
+          setUserList(response.data);
+        }
       })
       .catch((error) => {
         console.log("Error fetching users: ", error.message);
+        setIsAuthenticated(false);
       });
   }, []);
+
+  if (!isAuthenticated) {
+    return (
+      <div align="center">
+        <br />
+        <h3 color="red">You are not authorized to access this page.</h3>
+      </div>
+    );
+  }
 
   return (
     <form>

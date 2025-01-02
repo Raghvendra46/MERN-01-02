@@ -53,7 +53,7 @@ const Login = () => {
         if (user) {
           localStorage.setItem("user", JSON.stringify(user));
           setMessage("Login Successful!");
-          navigate("/welcome")
+          navigate("/")
           console.log("response => ", response.data);
         }
       })
