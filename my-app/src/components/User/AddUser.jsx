@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const AddUser = () => {
+  const { id } = useParams();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -21,6 +23,23 @@ const AddUser = () => {
     setErrors({ ...errors, [name]: "" });
   };
 
+  useEffect(() => {
+    if (id) {
+      axios
+        .get(`http://localhost:3000/user/getUserById/${id}`)
+        .then((response) => {
+          const userData = response.data;
+          const formattedDob = new Date(userData.dob)
+            .toISOString()
+            .split("T")[0];
+          setFormData({ ...userData, dob: formattedDob });
+        })
+        .catch((error) => {
+          console.log("Error in fetching User: ", error.message);
+        });
+    }
+  }, [id]);
+
   const validate = () => {
     const newErrors = {};
 
@@ -38,7 +57,11 @@ const AddUser = () => {
 
     if (!formData.loginId.trim()) {
       newErrors.loginId = "Login ID is required";
-    } else if (!formData.loginId.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
+    } else if (
+      !formData.loginId.match(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+      )
+    ) {
       newErrors.loginId = "Login ID format is invalid";
     }
 
@@ -74,10 +97,16 @@ const AddUser = () => {
       return;
     }
 
+    const url = id
+      ? `http://localhost:3000/user/update/${id}`
+      : "http://localhost:3000/user/save";
+
     axios
-      .post("http://localhost:3000/user/save", formData)
+      .post(url, formData)
       .then((response) => {
-        setMessage(response.data.error ? response.data.error : 'User Added successfully');
+        setMessage(
+          response.data.error ? response.data.error : response.data.message
+        );
         console.log("response => ", response.data);
       })
       .catch((error) => {
@@ -88,14 +117,14 @@ const AddUser = () => {
 
   return (
     <div>
-      <h1 align="center">Add User</h1>
+      <h1 align="center">{id ? "Edit User" : "Add User"}</h1>
       <form onSubmit={handleAddUser}>
         {message && (
           <div
             align="center"
             style={{
               marginTop: "20px",
-              color: message.includes("successfully") ? "green" : "red",
+              color: message.includes("Successfully") ? "green" : "red",
             }}
           >
             {message}
@@ -207,7 +236,7 @@ const AddUser = () => {
             <tr>
               <th></th>
               <td>
-                <input type="submit" value="save" />
+                <input type="submit" value={id ? "update" : "save"} />
               </td>
             </tr>
           </tbody>

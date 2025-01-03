@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 
 mongoose
-  .connect("mongodb://localhost:27017/merndb")
+  .connect("mongodb://127.0.0.1:27017/merndb")  //for windows
+  // .connect("mongodb://localhost:27017/merndb")
   .then(() => {
     console.log("Connected to MongoDB");
   })
