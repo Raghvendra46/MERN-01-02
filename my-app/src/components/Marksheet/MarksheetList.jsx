@@ -1,20 +1,56 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+
+axios.defaults.withCredentials = true;
 
 const MarksheetList = () => {
   const [marksheetList, setMarksheetList] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
-  useEffect(() => {
+  const fetchMarksheets = () => {
     axios
       .get("http://localhost:3000/marksheet/searchMarksheet")
       .then((response) => {
-        console.log("Data => ", response.data);
-        setMarksheetList(response.data);
+        if (response.status === 401) {
+          setIsAuthenticated(false);
+        } else {
+          setMarksheetList(response.data);
+        }
       })
       .catch((error) => {
-        console.log("Error fetching Marksheets: ", error.message);
+        console.log("Error fetching Students: ", error.message);
+        setIsAuthenticated(false);
       });
+  };
+
+  const deleteMarksheet = (id) => {
+    if (window.confirm("Confirm Marksheet Deletion?")) {
+      axios
+        .post(`http://localhost:3000/marksheet/delete/${id}`)
+        .then(() => {
+          alert("Marksheet has been deleted successfully");
+          fetchMarksheets();
+        })
+        .catch((error) => {
+          console.log("Error deleting marksheet: ", error.message);
+          alert("Unable to delete marksheet, try again later");
+        });
+    }
+  };
+
+  useEffect(() => {
+    fetchMarksheets();
   }, []);
+
+  if (!isAuthenticated) {
+    return (
+      <div align="center">
+        <br />
+        <h3 color="red">You are not authorized to access this page.</h3>
+      </div>
+    );
+  }
 
   const percent = (totalMarks) => {
     const totalMaximumMarks = 300;
@@ -46,8 +82,7 @@ const MarksheetList = () => {
           <th>Maths</th>
           <th>Percentage</th>
           <th>Status</th>
-          <th>Edit</th>
-          <th>Remove</th>
+          <th>Actions</th>
         </thead>
         <tbody>
           {marksheetList.map((marksheet) => (
@@ -58,13 +93,16 @@ const MarksheetList = () => {
               <td>{marksheet.physics}</td>
               <td>{marksheet.chemistry}</td>
               <td>{marksheet.maths}</td>
-              <td>{percent(marksheet.totalMarks)+'%'}</td>
+              <td>{percent(marksheet.totalMarks) + "%"}</td>
               <td>{checkStatus(marksheet)}</td>
               <td>
-                <a href="#">edit</a>
-              </td>
-              <td>
-                <button>delete</button>
+                <Link to={`/editMarksheet/${marksheet._id}`}>
+                  <button>Edit</button>
+                </Link>
+                &nbsp;
+                <button onClick={() => deleteMarksheet(marksheet._id)}>
+                  Delete
+                </button>
               </td>
             </tr>
           ))}

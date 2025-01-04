@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const AddStudent = () => {
+  const { id } = useParams();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -19,6 +21,23 @@ const AddStudent = () => {
     setFormData({ ...formData, [name]: value });
     setErrors({ ...errors, [name]: "" });
   };
+
+  useEffect(() => {
+    if (id) {
+      axios
+        .get(`http://localhost:3000/student/getStudentById/${id}`)
+        .then((response) => {
+          const studentData = response.data;
+          const formattedDob = new Date(studentData.dob)
+            .toISOString()
+            .split("T")[0];
+          setFormData({ ...studentData, dob: formattedDob });
+        })
+        .catch((error) => {
+          console.log("Error in fetching Student: ", error.message);
+        })
+    }
+  }, [id]);
 
   const validate = () => {
     const newErrors = {};
@@ -73,10 +92,16 @@ const AddStudent = () => {
       return;
     }
 
+    const url = id
+      ? `http://localhost:3000/student/update/${id}`
+      : "http://localhost:3000/student/save";
+
     axios
-      .post("http://localhost:3000/student/save", formData)
+      .post(url, formData)
       .then((response) => {
-        setMessage("Student added successfully!");
+        setMessage(
+          response.data.error ? response.data.error : response.data.message
+        );
         console.log("response => ", response.data);
       })
       .catch((error) => {
@@ -87,14 +112,14 @@ const AddStudent = () => {
 
   return (
     <div>
-      <h1 align="center">Add Student</h1>
+      <h1 align="center">{id ? "Edit Student" : "Add Student"}</h1>
       <form onSubmit={handleAddStudent}>
         {message && (
           <div
             align="center"
             style={{
               marginTop: "20px",
-              color: message.includes("successfully") ? "green" : "red",
+              color: message.includes("Successfully") ? "green" : "red",
             }}
           >
             {message}
@@ -191,7 +216,7 @@ const AddStudent = () => {
             <tr>
               <th></th>
               <td>
-                <input type="submit" value="save" />
+                <input type="submit" value={id ? "update" : "save"} />
               </td>
             </tr>
           </tbody>

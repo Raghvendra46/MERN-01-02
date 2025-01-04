@@ -79,7 +79,7 @@ const UserList = () => {
                   <button>Edit</button>
                 </Link>
                 &nbsp;
-                <button onClick={() => deleteUser(user._id)}>delete</button>
+                <button onClick={() => deleteUser(user._id)}>Delete</button>
               </td>
             </tr>
           ))}

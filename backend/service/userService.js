@@ -27,7 +27,7 @@ const updateUser = (userId, updateData) => {
       if (!updatedUser) {
         throw new Error("User not found");
       } else {
-        return { message: "User updated successfully" };
+        return { message: "User updated Successfully" };
       }
     })
     .catch((error) => {

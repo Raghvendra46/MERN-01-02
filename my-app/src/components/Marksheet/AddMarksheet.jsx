@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const AddMarksheet = () => {
+  const { id } = useParams();
   const [formData, setFormData] = useState({
     rollNo: "",
     firstName: "",
@@ -19,6 +21,20 @@ const AddMarksheet = () => {
     setFormData({ ...formData, [name]: value });
     setErrors({ ...errors, [name]: "" });
   };
+
+  useEffect(() => {
+    if (id) {
+      axios
+        .get(`http://localhost:3000/marksheet/getMarksheetById/${id}`)
+        .then((response) => {
+          const marksheetData = response.data;
+          setFormData({ ...marksheetData });
+        })
+        .catch((error) => {
+          console.log("Error in fetching Marksheet: ", error.message);
+        });
+    }
+  }, [id]);
 
   const validate = () => {
     const newErrors = {};
@@ -62,10 +78,14 @@ const AddMarksheet = () => {
       return;
     }
 
+    const url = id
+      ? `http://localhost:3000/marksheet/update/${id}`
+      : "http://localhost:3000/marksheet/save";
+
     axios
-      .post("http://localhost:3000/marksheet/save", formData)
+      .post(url, formData)
       .then((response) => {
-        setMessage("Marksheet Added successfully");
+        setMessage(response.data.error ? response.data.error : response.data.message)
         console.log("response => ", response.data);
       })
       .catch((error) => {
@@ -76,14 +96,14 @@ const AddMarksheet = () => {
 
   return (
     <div>
-      <h1 align="center">Add Marksheet</h1>
+      <h1 align="center">{id ? "Edit Marksheet" : "Add Marksheet"}</h1>
       <form onSubmit={handleAddMarksheet}>
         {message && (
           <div
             align="center"
             style={{
               marginTop: "20px",
-              color: message.includes("successfully") ? "green" : "red",
+              color: message.includes("Successfully") ? "green" : "red",
             }}
           >
             {message}
@@ -181,7 +201,7 @@ const AddMarksheet = () => {
             <tr>
               <th></th>
               <td>
-                <input type="submit" value="save" />
+                <input type="submit" value={id ? "update" : "save"} />
               </td>
             </tr>
           </tbody>

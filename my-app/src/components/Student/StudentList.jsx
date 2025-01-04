@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 axios.defaults.withCredentials = true;
 
@@ -7,7 +8,7 @@ const StudentList = () => {
   const [studentList, setStudentList] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
-  useEffect(() => {
+  const fetchStudents = () => {
     axios
       .get("http://localhost:3000/student/searchStudent")
       .then((response) => {
@@ -21,6 +22,25 @@ const StudentList = () => {
         console.log("Error fetching students: ", error.message);
         setIsAuthenticated(false);
       });
+  };
+
+  const deleteStudent = (id) => {
+    if (window.confirm("Confirm Student Deletion?")) {
+      axios
+        .post(`http://localhost:3000/student/delete/${id}`)
+        .then(() => {
+          alert("Student has been deleted successfully");
+          fetchStudents();
+        })
+        .catch((error) => {
+          console.log("Error deleting student: ", error.message);
+          alert("Unable to delete student, try again later.");
+        });
+    }
+  };
+
+  useEffect(() => {
+    fetchStudents();
   }, []);
 
   if (!isAuthenticated) {
@@ -42,6 +62,7 @@ const StudentList = () => {
           <th>Login ID</th>
           <th>DOB</th>
           <th>Gender</th>
+          <th>Actions</th>
         </thead>
         <tbody>
           {studentList.map((student) => (
@@ -49,8 +70,17 @@ const StudentList = () => {
               <td>{student.firstName}</td>
               <td>{student.lastName}</td>
               <td>{student.loginId}</td>
-              <td>{student.dob}</td>
+              <td>{new Date(student.dob).toLocaleDateString()}</td>
               <td>{student.gender}</td>
+              <td>
+                <Link to={`/editStudent/${student._id}`}>
+                  <button>Edit</button>
+                </Link>
+                &nbsp;
+                <button onClick={() => deleteStudent(student._id)}>
+                  Delete
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

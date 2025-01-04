@@ -28,6 +28,8 @@ const App = () => {
             <Route path="/marksheetList" element={<MarksheetList />}></Route>
             <Route path="/addMarksheet" element={<AddMarksheet />}></Route>
             <Route path="/editUser/:id" element={<AddUser />}></Route>
+            <Route path="/editStudent/:id" element={<AddStudent />}></Route>
+            <Route path="/editMarksheet/:id" element={<AddMarksheet />}></Route>
           </Routes>
         </div>
       </Router>

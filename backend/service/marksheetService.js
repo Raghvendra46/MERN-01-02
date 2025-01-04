@@ -27,7 +27,7 @@ const updateMarksheet = (marksheetId, marksheetData) => {
       if (!updateMarksheet) {
         throw new Error("Marksheet not found");
       } else {
-        return { message: "Marksheet updated successfully" };
+        return { message: "Marksheet updated Successfully" };
       }
     })
     .catch((error) => {
