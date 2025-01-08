@@ -97,8 +97,8 @@ router.get("/getUserById/:id", (req, res) => {
 });
 
 router.get("/search", (req, res) => {
-  console.log("search data: ", req.body);
-  const query = req.body;
+  console.log("search data: ", req.query);
+  const query = req.query;
   userService
     .searchUser(query)
     .then((result) => {

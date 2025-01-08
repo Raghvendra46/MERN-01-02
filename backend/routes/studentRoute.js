@@ -59,7 +59,8 @@ router.get("/getStudentById/:id", (req, res) => {
 });
 
 router.get("/searchStudent", (req, res) => {
-  const query = req.body;
+  console.log("search data: ", req.query);
+  const query = req.query;
   studentService
     .searchStudent(query)
     .then((result) => {

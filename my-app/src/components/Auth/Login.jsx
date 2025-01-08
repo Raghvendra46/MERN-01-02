@@ -50,10 +50,11 @@ const Login = () => {
       .post("http://localhost:3000/user/login", formData)
       .then((response) => {
         const user = response.data.user;
+        console.log("user =", user);
         if (user) {
           localStorage.setItem("user", JSON.stringify(user));
           setMessage("Login Successful!");
-          navigate("/")
+          navigate("/");
           console.log("response => ", response.data);
         }
       })

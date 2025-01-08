@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
+axios.defaults.withCredentials = true;
+
 const AddMarksheet = () => {
   const { id } = useParams();
   const [formData, setFormData] = useState({
     rollNo: "",
-    firstName: "",
-    lastName: "",
+    name: "",
     physics: "",
     chemistry: "",
     maths: "",
@@ -16,6 +17,8 @@ const AddMarksheet = () => {
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
 
+  const [studentName, setStudentName] = useState([]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -23,6 +26,19 @@ const AddMarksheet = () => {
   };
 
   useEffect(() => {
+    axios
+      .get("http://localhost:3000/student/searchStudent")
+      .then((response) => {
+        const name = response.data.map(
+          (student) => `${student.firstName} ${student.lastName}`
+        );
+        setStudentName(name);
+      })
+      .catch((error) => {
+        setMessage("An error occurred");
+        console.error(error);
+      });
+
     if (id) {
       axios
         .get(`http://localhost:3000/marksheet/getMarksheetById/${id}`)
@@ -41,18 +57,6 @@ const AddMarksheet = () => {
 
     if (!formData.rollNo) {
       newErrors.rollNo = "Roll No. is required";
-    }
-
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = "First Name is required";
-    } else if (!isNaN(formData.firstName)) {
-      newErrors.firstName = "First Name should only include letters";
-    }
-
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = "Last Name is required";
-    } else if (!isNaN(formData.lastName)) {
-      newErrors.lastName = "Last Name should only include letters";
     }
 
     if (!formData.physics) {
@@ -85,7 +89,9 @@ const AddMarksheet = () => {
     axios
       .post(url, formData)
       .then((response) => {
-        setMessage(response.data.error ? response.data.error : response.data.message)
+        setMessage(
+          response.data.error ? response.data.error : response.data.message
+        );
         console.log("response => ", response.data);
       })
       .catch((error) => {
@@ -127,33 +133,20 @@ const AddMarksheet = () => {
               </td>
             </tr>
             <tr>
-              <th>FirstName:</th>
+              <th>Name:</th>
               <td>
-                <input
-                  type="text"
-                  name="firstName"
-                  value={formData.firstName}
-                  placeholder="Enter First Name"
+                <select
+                  name="name"
+                  value={formData.name}
                   onChange={handleChange}
-                />
-                {errors.firstName && (
-                  <div style={{ color: "red" }}>{errors.firstName}</div>
-                )}
-              </td>
-            </tr>
-            <tr>
-              <th>LastName:</th>
-              <td>
-                <input
-                  type="text"
-                  name="lastName"
-                  value={formData.lastName}
-                  placeholder="Enter Last Name"
-                  onChange={handleChange}
-                />
-                {errors.lastName && (
-                  <div style={{ color: "red" }}>{errors.lastName}</div>
-                )}
+                >
+                  <option value="">--------Select Name-------</option>
+                  {studentName.map((name, index) => (
+                    <option key={index} value={name}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
               </td>
             </tr>
             <tr>

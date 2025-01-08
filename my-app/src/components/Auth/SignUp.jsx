@@ -9,7 +9,7 @@ const SignUp = () => {
     password: "",
     dob: "",
     gender: "",
-    role: "User",
+    role: "student",
   });
 
   const [errors, setErrors] = useState({});

@@ -5,12 +5,18 @@ import { Link } from "react-router-dom";
 axios.defaults.withCredentials = true;
 
 const MarksheetList = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
   const [marksheetList, setMarksheetList] = useState([]);
+  const [searchQuery, setSearchQuery] = useState({
+    name: "",
+  });
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
-  const fetchMarksheets = () => {
+  const fetchMarksheets = (query = {}) => {
+    const queryString = new URLSearchParams(query).toString();
+
     axios
-      .get("http://localhost:3000/marksheet/searchMarksheet")
+      .get(`http://localhost:3000/marksheet/searchMarksheet?${queryString}`)
       .then((response) => {
         if (response.status === 401) {
           setIsAuthenticated(false);
@@ -37,6 +43,12 @@ const MarksheetList = () => {
           alert("Unable to delete marksheet, try again later");
         });
     }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setSearchQuery({ ...searchQuery, [name]: value });
+    setErrors({ ...errors, [name]: "" });
   };
 
   useEffect(() => {
@@ -69,46 +81,74 @@ const MarksheetList = () => {
     }
   };
 
+  const handleSearchClick = () => {
+    fetchMarksheets(searchQuery);
+  };
+
   return (
-    <form>
+    <div>
       <br />
-      <table align="center" border={1} width="100%">
-        <thead>
-          <th>Roll No.</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Physics</th>
-          <th>Chemistry</th>
-          <th>Maths</th>
-          <th>Percentage</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </thead>
+      <table>
         <tbody>
-          {marksheetList.map((marksheet) => (
-            <tr key={marksheet._id} align="center">
-              <td>{marksheet.rollNo}</td>
-              <td>{marksheet.firstName}</td>
-              <td>{marksheet.lastName}</td>
-              <td>{marksheet.physics}</td>
-              <td>{marksheet.chemistry}</td>
-              <td>{marksheet.maths}</td>
-              <td>{percent(marksheet.totalMarks) + "%"}</td>
-              <td>{checkStatus(marksheet)}</td>
-              <td>
-                <Link to={`/editMarksheet/${marksheet._id}`}>
-                  <button>Edit</button>
-                </Link>
-                &nbsp;
-                <button onClick={() => deleteMarksheet(marksheet._id)}>
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
+          <tr>
+            Name:
+            <td>
+              <input
+                type="text"
+                name="name"
+                value={searchQuery.name}
+                placeholder="Enter Full Name"
+                onChange={handleChange}
+              />
+            </td>
+            <td>
+              <button onClick={handleSearchClick}>search</button>
+            </td>
+          </tr>
         </tbody>
       </table>
-    </form>
+      <form>
+        <br />
+        <table align="center" border={1} width="100%">
+          <thead>
+            <th>Roll No.</th>
+            <th>Name</th>
+            <th>Physics</th>
+            <th>Chemistry</th>
+            <th>Maths</th>
+            <th>Percentage</th>
+            <th>Status</th>
+            {user.role === "User" ? <th>Actions</th> : ""}
+          </thead>
+          <tbody>
+            {marksheetList.map((marksheet) => (
+              <tr key={marksheet._id} align="center">
+                <td>{marksheet.rollNo}</td>
+                <td>{marksheet.name}</td>
+                <td>{marksheet.physics}</td>
+                <td>{marksheet.chemistry}</td>
+                <td>{marksheet.maths}</td>
+                <td>{percent(marksheet.totalMarks) + "%"}</td>
+                <td>{checkStatus(marksheet)}</td>
+                {user.role === "User" ? (
+                  <td>
+                    <Link to={`/editmarksheet/${marksheet._id}`}>
+                      <button>Edit</button>
+                    </Link>
+                    &nbsp;
+                    <button onClick={() => deleteMarksheet(marksheet._id)}>
+                      Delete
+                    </button>
+                  </td>
+                ) : (
+                  ""
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </form>
+    </div>
   );
 };
 

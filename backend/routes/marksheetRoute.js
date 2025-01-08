@@ -50,7 +50,8 @@ router.get("/getMarksheetById/:id", (req, res) => {
 });
 
 router.get("/searchMarksheet", (req, res) => {
-  const query = req.body;
+  console.log("search data: ", req.query);
+  const query = req.query;
   marksheetService
     .searchMarksheet(query)
     .then((result) => {

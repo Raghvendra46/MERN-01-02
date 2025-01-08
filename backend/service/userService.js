@@ -97,8 +97,10 @@ const authenticate = (loginId, password) => {
     .findOne({ loginId, password })
     .then((user) => {
       if (!user) {
-        throw new Error('invlaid loginId and password');
+        console.log("user ====>>>> ", user);
+        throw new Error("invalid loginId and password");
       } else {
+        console.log("user ====> ", user);
         return user;
       }
     })
