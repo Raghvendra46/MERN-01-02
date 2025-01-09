@@ -8,6 +8,8 @@ const UserList = () => {
   const [userList, setUserList] = useState([]);
   const [searchQuery, setSearchQuery] = useState({
     firstName: "",
+    lastName: "",
+    loginId: "",
   });
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
@@ -82,6 +84,50 @@ const UserList = () => {
                 placeholder="Enter First Name"
                 onChange={handleChange}
               />
+            </td>
+            Last Name:
+            <td>
+              <input
+                type="text"
+                name="lastName"
+                value={searchQuery.lastName}
+                placeholder="Enter LastName Name"
+                onChange={handleChange}
+              />
+            </td>
+            Login ID:
+            <td>
+              <input
+                type="text"
+                name="loginId"
+                value={searchQuery.loginId}
+                placeholder="Enter Login ID"
+                onChange={handleChange}
+              />
+            </td>
+            Gender:
+            <td>
+              <select
+                name="gender"
+                value={searchQuery.gender}
+                onChange={handleChange}
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </td>
+            Role:
+            <td>
+              <select
+                name="role"
+                value={searchQuery.role}
+                onChange={handleChange}
+              >
+                <option value="">Select Role</option>
+                <option value="User">User</option>
+                <option value="Student">Student</option>
+              </select>
             </td>
             <td>
               <button onClick={handleSearchClick}>search</button>

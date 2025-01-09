@@ -98,7 +98,25 @@ router.get("/getUserById/:id", (req, res) => {
 
 router.get("/search", (req, res) => {
   console.log("search data: ", req.query);
-  const query = req.query;
+  const query = {};
+
+  if (req.query.firstName) {
+    query.firstName = new RegExp(req.query.firstName);
+  }
+  if (req.query.lastName) {
+    query.lastName = new RegExp(req.query.lastName);
+  }
+  if (req.query.loginId) {
+    query.loginId = new RegExp(req.query.loginId)
+  }
+  if (req.query.gender) {
+    query.gender = new RegExp(req.query.gender)
+  }
+  if (req.query.role) {
+    query.role = new RegExp(req.query.role)
+  }
+  console.log("query === ", query);
+
   userService
     .searchUser(query)
     .then((result) => {
